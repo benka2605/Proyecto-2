@@ -2,7 +2,7 @@ django
 django-admin-interface
 django-crispy-forms
 crispy_bootstrap4
-psycopg2
+psycopg2-binary
 django-admin-confirm
 django-axes
 django-simple-captcha
