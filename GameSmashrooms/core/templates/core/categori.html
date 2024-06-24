@@ -1,0 +1,62 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<main>
+    <div class="about-area2 gray-bg pt-60 pb-60">
+        <div class="container">
+            <div class="row elpepe">
+                <div class="col-lg-8">
+                    <div class="whats-news-wrapper">
+                        <div class="row justify-content-between align-items-end mb-15">
+                            <div class="col-xl-2">
+                                <div class="section-tittle mb-30">
+                                    <h3>Categorías</h3>
+                                </div>
+                            </div>
+                            <div class="col-xl-10 col-md-9">
+                                <div class="properties__button">
+                                    <nav>
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                            {% for category in categories %}
+                                                <a class="nav-item nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ category.id }}-tab" data-toggle="tab" href="#nav-{{ category.id }}" role="tab" aria-controls="nav-{{ category.id }}" aria-selected="true">{{ category.name }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="tab-content" id="nav-tabContent">
+                                    {% for category in categories %}
+                                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="nav-{{ category.id }}" role="tabpanel" aria-labelledby="nav-{{ category.id }}-tab">
+                                            <div class="row">
+                                                {% for news in category.noticia_set.all %}
+                                                    <div class="col-xl-6 col-lg-6 col-md-6">
+                                                        <div class="whats-news-single mb-40">
+                                                            <div class="whates-img">
+                                                                
+                                                                <li><img src="{{ news.images.first.image.url }}" alt="{{ news.titulo }}" style="height: 204.81px; width: 306px;"></li>
+                                                                
+                                                            </div>
+                                                            <div class="whates-caption whates-caption2">
+                                                                <h4><a href="{% url 'noticia' noticia_id=news.pk %}" style="text-decoration: none;">{{ news.titulo }}</a></h4>
+                                                                <span>por {{ news.periodista.nombre }} {{ news.periodista.apellido }} - {{ news.fecha_noticia | date:"d-m-Y" }}</span>
+                                                                <p>{{ news.descripcion|truncatechars:300 }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

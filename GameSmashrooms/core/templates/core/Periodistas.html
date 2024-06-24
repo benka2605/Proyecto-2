@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+
+
+<h1 class="elpepe mt-4">Periodistas</h1>
+
+
+
+<div class="container my-5 elpepe">
+    <div class="row">
+        {% for periodista in periodistas %}
+
+        <div class="col-md-6 mb-4">
+
+                <div class="card" >
+                    <div class="card-body">
+                        <h1 style="text-align: center;" class="mt-5 texto_ultimasnoticias">{{ periodista.nombre }} {{ periodista.apellido }}</h1>
+                        <h4 style="text-align: center;">{{ periodista.usuario}}</h4>
+                        
+                            <ul>
+                                {% for news in lista %}
+                                
+                                {% if news.periodista == periodista %}
+                                <li>
+                                    <a href="{% url 'noticia' noticia_id=news.id %}" style="text-decoration: none;">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <img src="{{ news.images.first.image.url }}" alt="{{ news.titulo }}" style="height: 104.81px; width: 206px; ">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <h4 style="text-align: center;" class="texto_periodistas mx-2">{{ news.titulo }}</h4>
+                                                <p style="text-align: center;" class="texto_periodistas">{{ news.fecha_noticia | date:"d-m-Y" }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock %}

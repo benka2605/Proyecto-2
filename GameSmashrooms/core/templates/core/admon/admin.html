@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<div class="container my-5">
+    <div class="row elpepe">
+        <div class="col-md-8">
+            <div class="text-center mb-4">
+                <h2>{{ user.username }}</h2>
+            </div>
+            <div class="card">
+                <div class="card-body d-flex flex-column align-items-center" style="background-color: rgb(78, 221, 178); border-radius: 6px;">
+                    <a href="{% url 'crear_periodista' %}"><button class="boton_admin">Crear Periodista</button></a>
+                    <a href="{% url 'noticia_admin' %}"><button class="boton_admin">Ver Noticias</button></a>
+                    <a href="{% url 'lista_admin' %}"><button class="boton_admin">Listado de noticias</button></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

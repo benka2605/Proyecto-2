@@ -1,0 +1,112 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<h1 class="mt-4 mb-4" style="text-align: center;">{{ user.username }}</h1>
+    <div class="container mt-3">
+        <h2 class="mt-4 mb-5" style="text-align: center;">NOTICIAS PUBLICADAS</h2>
+        <table class="table table-striped my-4">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>Imagen</th>
+                    <th>Descripcion</th>
+                    <th>Categoria</th>
+                    <th>Fecha</th>
+                    <th>Administrar</th>
+                    <th>Estado</th>
+                    <th>Razon</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for noticia in noticias_usuario %}
+                <tr>
+                    <td>{{ noticia.titulo }}</td>
+                    <td>
+                        {% for imagen in noticia.images.all %}
+                        <img src="{{ imagen.image.url }}" alt="" style="width: 110%; height: 150px;">
+                        {% endfor %}
+                    </td>
+                    <td>{{ noticia.descripcion|truncatechars:200 }}</td>
+                    <td>{{ noticia.categoria }}</td>
+                    <td>{{ noticia.fecha_noticia }}</td>
+                    <td>
+                        <!-- Formulario para aprobar -->
+                        <form action="{% url 'aprobado' noticia.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="aprobar" value="1">
+                            <button type="submit" class="primary-button mb-3">Aprobar</button>
+                        </form>
+                        <!-- Botón para rechazar -->
+                        <button class="reject-button noselect" data-noticia-id="{{ noticia.id }}">
+                            <span class="text">Rechazar</span>
+                            <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path
+                                        d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z">
+                                    </path>
+                                </svg>
+                            </span>
+                        </button>
+                    </td>
+                    <td>{{ noticia.estado }}</td>
+                    <td>{{ noticia.razon }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        document.querySelectorAll('.reject-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const noticiaId = this.getAttribute('data-noticia-id');
+                Swal.fire({
+                    title: 'Motivo de Rechazo',
+                    input: 'textarea',
+                    inputPlaceholder: 'Ingrese el motivo de rechazo...',
+                    showCancelButton: true,
+                    confirmButtonText: 'Enviar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const motivoRechazo = result.value;
+
+                        fetch('{% url "rechazar_noticia" %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken
+                            },
+                            body: JSON.stringify({
+                                noticia_id: noticiaId,
+                                motivo_rechazo: motivoRechazo
+                            })
+                        }).then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        }).then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire('Rechazado', 'La noticia ha sido rechazada.', 'success').then(() => {
+                                    location.reload(); // Recargar la página para ver los cambios
+                                });
+                            } else {
+                                Swal.fire('Error', data.error || 'Hubo un problema al rechazar la noticia.', 'error');
+                            }
+                        }).catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Error', 'Hubo un problema al rechazar la noticia.', 'error');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+
+{% endblock %}

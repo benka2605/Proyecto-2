@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<main>
+
+
+    <h1 class="elpepe mt-4">Últimas Noticias</h1>
+
+
+
+    <div class="container my-5 elpepe">
+        <div class="row">
+            {% for noticia in noticias %}
+            {% if noticia.estado %}
+            <div class="col-md-6 mb-4">
+                <a href="{% url 'noticia' noticia_id=noticia.id %}" class="texto_ultimasnoticias" style="text-decoration: none;">
+                    <div class="card" style="width:600px; height: 710px;">
+                        <div class="container mt-5" style="text-align: center;">
+                            <li><img src="{{ noticia.images.first.image.url }}" alt="{{ news.titulo }}" style="height: 204.81px; width: 306px;"></li>
+                        </div>
+                        <div class="card-body">
+                            <h1 style="text-align: center;" class="mt-5 texto_ultimasnoticias">{{ noticia.titulo }}</h1>
+                            <p style="text-align: center;">{{ noticia.descripcion | truncatechars:100}}</p>
+                            <p style="text-align: center;">{{ noticia.periodista }}-----{{ noticia.fecha_noticia }}</p>
+                            <p style="text-align: center;">{{ noticia.categoria }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    
+
+
+</main>
+
+{% endblock %}

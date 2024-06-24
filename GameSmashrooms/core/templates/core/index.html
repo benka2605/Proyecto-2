@@ -1,0 +1,145 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<main>
+    <!--   Weekly3-News start -->
+    <div class="weekly3-news-area pt-80 pb-30">
+            <div class="container">
+                <div class="weekly3-wrapper">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="slider-wrapper">
+                                <!-- Slider -->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="weekly3-news-active dot-style d-flex">
+                                            {% for noticia in noticias|slice:":7" %}
+                                            <div class="weekly3-single">
+                                                <div class="weekly3-img">
+                                                    {% for imagen in noticia.images.all %}
+                        <li><img src="{{ imagen.image.url }}" alt="Imagen asociada a la noticia" style="width: 257px; height: 205px;"></li>
+                    {% endfor %}
+                                                    
+                                                </div>
+                                                <div class="weekly3-caption">
+                                                    <h4><a href="{% url 'noticia' noticia_id=noticia.id %}" style="text-decoration: none;">{{ noticia.titulo }}</a></h4>
+                                                    <p>{{ noticia.fecha_noticia | date:"d-m-Y" }}</p>
+                                                </div>
+                                            </div> 
+                                            {% endfor %} 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>           
+    <!-- End Weekly-News -->
+    
+    <!-- Whats New Start -->
+    <section class="whats-news-area pt-50 pb-20 gray-bg">
+        <div class="container">
+            <div class="row elpepe">
+                <div class="col-lg-8">
+                    <div class="whats-news-wrapper">
+                        <div class="row justify-content-between align-items-end mb-15">
+                            <div class="col-xl-2">
+                                <div class="section-tittle mb-30">
+                                    <h3>Categorías</h3>
+                                </div>
+                            </div>
+                            <div class="col-xl-10 col-md-9">
+                                <div class="properties__button">
+                                    <nav>
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                            {% for category in categories %}
+                                                <a class="nav-item nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ category.id }}-tab" data-toggle="tab" href="#nav-{{ category.id }}" role="tab" aria-controls="nav-{{ category.id }}" aria-selected="true">{{ category.name }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="tab-content" id="nav-tabContent">
+                                    {% for category in categories %}
+    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="nav-{{ category.id }}" role="tabpanel" aria-labelledby="nav-{{ category.id }}-tab">
+        <div class="row">
+            {% for news in category.noticia_set.all|slice:":2" %}
+                {% if news.estado %}
+                    <div class="col-xl-6 col-lg-6 col-md-6">
+                        <div class="whats-news-single mb-40">
+                            <div class="whates-img">
+                                <img src="{{ news.images.first.image.url }}" alt="{{ news.titulo }}" style="height: 204.81px; width: 306px;">
+                            </div>
+                            <div class="whates-caption whates-caption2">
+                                <h4><a href="{% url 'noticia' noticia_id=news.pk %}" style="text-decoration: none;">{{ news.titulo }}</a></h4>
+                                <span>por {{ news.periodista.nombre }} {{ news.periodista.apellido }} - {{ news.fecha_noticia | date:"d-m-Y" }}</span>
+                                <p>{{ news.descripcion|truncatechars:300 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% if not category.noticia_set.all|slice:":2"|length %}
+                
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Whats New End -->
+    <div class="container">
+        <div class="row">
+            {% for noticia in page_obj %}
+            <div class="col-md-4 elpepe">
+                <a href="{% url 'noticia' noticia_id=noticia.id %}" class="texto-noticia" style="text-decoration: none;">
+                    <div class="card mb-3" style="width:400px; height: 610px;">
+                        <img class="card-img-top" src="{{ noticia.images.first.image.url }}" alt="Card image" style="width:100%; height: 276px;">
+                        <div class="card-body">
+                        <h4 class="card-title">{{ noticia.titulo }}</h4>
+                        <p class="card-text">{{ noticia.descripcion|truncatechars:300 }}</p>
+                        </div>
+                    </div>
+                </a>
+                
+            </div>
+                
+            {% endfor %}
+        </div>
+    </div>
+
+        <!-- Paginación -->
+    <div class="container elpepe mb-3">
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; primera</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">anterior</a>
+                {% endif %}
+                
+                <span class="current">
+                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">siguiente</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">última &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    <!-- Fin Paginación -->
+
+</main>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<div class="container mt-3">
+    <h1 class="mt-4 mb-4" style="text-align: center;">{{ user.username }}</h1>
+    <div class="table-responsive">
+        <table class="table table-striped my-4">
+            <thead>
+                <tr>
+                    <th class="table-title">Titulo</th>
+                    <th class="table-image">Imagen</th>
+                    <th class="table-description">Descripcion</th>
+                    <th class="table-category">Categoria</th>
+                    <th class="table-date">Fecha</th>
+                    <th class="table-admin">Administrar</th>
+                    <th class="table-status">Estado</th>
+                    <th class="table-reason">Razon</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for noticia in noticias_usuario %}
+                <tr class="table-row">
+                    <td class="table-title">{{ noticia.titulo }}</td>
+                    <td class="table-image">
+                        {% for imagen in noticia.images.all %}
+                        <img src="{{ imagen.image.url }}" alt="" style="width: 110%; height: 150px;">
+                        {% endfor %}
+                    </td>
+                    <td class="table-description">{{ noticia.descripcion|truncatechars:200 }}</td>
+                    <td class="table-category">{{ noticia.categoria }}</td>
+                    <td class="table-date">{{ noticia.fecha_noticia }}</td>
+                    <td class="table-admin">
+                        <a href="{% url 'editar_noticia' noticia.id %}">
+                            <button class="primary-button mb-3">Modificar</button>
+                        </a>
+                        <form id="delete-form-{{ noticia.id }}" method="post" action="{% url 'noticia_delete' noticia.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="button" class="delete-button noselect" data-id="{{ noticia.id }}">
+                                <span class="text">Borrar</span>
+                                <span class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <path
+                                            d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z">
+                                        </path>
+                                    </svg>
+                                </span>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="table-status">{{ noticia.estado }}</td>
+                    <td class="table-reason"><p>{{ noticia.razon }}</p></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const noticiaId = this.getAttribute('data-id');
+            const form = document.getElementById(`delete-form-${noticiaId}`);
+            
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, eliminarlo",
+                cancelButtonText: "No, cancelar",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData(form);
+                    fetch(form.action, {
+                        method: form.method,
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': "{{ csrf_token }}"
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            Swal.fire(
+                                'Eliminado!',
+                                'La noticia ha sido eliminada.',
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            throw new Error('Network response was not ok.');
+                        }
+                    }).catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                        Swal.fire(
+                            'Error!',
+                            'Hubo un problema eliminando la noticia.',
+                            'error'
+                        );
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+{% endblock %}

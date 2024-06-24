@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<form method="post">
+    {% csrf_token %}
+    <!-- Otros campos de la noticia -->
+    {% if noticia.estado %}
+        <!-- Si la noticia está aprobada, muestra un botón de rechazo -->
+        <button type="submit" name="rechazar">Rechazar</button>
+    {% else %}
+        <!-- Si la noticia está rechazada, muestra un campo de texto para el motivo de rechazo -->
+        <textarea name="motivo_rechazo" placeholder="Motivo de rechazo"></textarea>
+        <button type="submit" name="aprobar">Aprobar</button>
+    {% endif %}
+</form>
+{% endblock %}

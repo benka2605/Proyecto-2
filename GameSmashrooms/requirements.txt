@@ -1,0 +1,15 @@
+django
+django-admin-interface
+django-crispy-forms
+crispy_bootstrap4
+psycopg2
+django-admin-confirm
+django-axes
+django-simple-captcha
+django-recaptcha
+reportlab
+djangorestframework
+requests
+django-multi-captcha-admin
+cloudinary
+django-cloudinary-storage

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+{%load static%}
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Pagina Noticiero</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico" />
+
+  <!-- CSS here -->
+  {% block css %} {% endblock %}
+  <!--{%static 'core/ '%}-->
+
+  <link rel="stylesheet" href="{%static 'core/assets/css/formulario.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/botones.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/bootstrap.min.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/owl.carousel.min.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/ticker-style.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/flaticon.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/slicknav.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/animate.min.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/magnific-popup.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/fontawesome-all.min.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/themify-icons.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/slick.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/nice-select.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/style.css'%}" />
+  <link rel="stylesheet" href="{%static 'core/assets/css/papus.css'%}" />
+  <!-- Enlace al CSS de Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="container-fluid">
+        <img src="{%static 'core/assets/img/logo/logo.png'%}" style="width: 3%" alt="" id="img-logo"/>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'internacionales' %}">Internacionales</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'categori' %}">Categorias</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'latest_news' %}">Últimas Noticias</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'periodistas' %}">Periodistas</a>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'contacto' %}">Contacto</a>
+            </li>  
+            <li class="nav-item dropdown">
+              {% if user.is_authenticated %}
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ user.username }}</a>
+              <ul class="dropdown-menu">
+                {% if user.groups.all.0.name == 'Usuario' %}
+                <li>
+                  <form action="{% url 'logout' %}" method="post">
+                      {% csrf_token %}
+                      <input class="elpedro" type="submit" value="Cerrar Sesión" />
+                  </form>
+              </li>
+                {% elif user.is_staff %}
+                <li><a class="dropdown-item" href="{% url 'admin2' %}">Mi perfil</a></li>
+                <li>
+                  <form action="{% url 'logout' %}" method="post">
+                      {% csrf_token %}
+                      <input class="elpedro" type="submit" value="Cerrar Sesión" />
+                  </form>
+              </li>
+                {% else %}
+                <li><a class="dropdown-item" href="{% url 'miperfil' %}">Mi perfil</a></li>
+                <li><a class="dropdown-item" href="{% url 'suscripcion' %}">Suscripcion</a></li>
+                <li><a class="dropdown-item" href="{% url 'historial' %}">Historial de compras</a></li>
+                <li><a class="dropdown-item" href="{% url 'noticia_add' %}">Subir noticia</a></li>
+                <li>
+                  <form action="{% url 'logout' %}" method="post">
+                      {% csrf_token %}
+                      <input class="elpedro" type="submit" value="Cerrar Sesión" />
+                  </form>
+              </li>
+                {% endif %}
+              </ul>
+              {% else %}
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Perfil</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'login' %}">Iniciar sesión</a></li>
+                <li><a class="dropdown-item" href="{% url 'register' %}">Registrarse</a></li>
+              </ul>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+</header>
+  {% block contenido %} {% endblock %}
+  <!-- Inicio del footer -->
+  <footer>
+    <div class="footer-container-fluid">
+      <div class="footer-section-1">
+        <h4 style="color: #fff">Sobre Nosotros</h4>
+        <p style="color: #fff">
+          Somos tu fuente número uno de noticias y análisis sobre videojuegos,
+          con todo lo que necesitas saber sobre tus juegos favoritos.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4>Contacto</h4>
+        <ul>
+          <li>Email: to.arriagadav@duocuc.cl</li>
+          <li>bene.munoz@duocuc.cl</li>
+          <li>
+            Twitter:
+            <a href="https://twitter.com/Tu_Noticiaa">@Tu_Noticiaa</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p style="color: #fff">
+        &copy; 2024 Tu Noticia. Todos los derechos reservados.
+      </p>
+    </div>
+  </footer>
+  <!-- Fin del footer -->
+
+  <!-- Search model Begin -->
+  <div class="search-model-box">
+    <div class="d-flex align-items-center h-100 justify-content-center">
+      <div class="search-close-btn">+</div>
+      <form class="search-model-form">
+        <input type="text" id="search-input" placeholder="Searching key....." />
+      </form>
+    </div>
+  </div>
+  <!-- Search model end -->
+
+  <!-- JS here -->
+  {% block js %} {% endblock %}
+  <script src="{%static 'core/./assets/js/vendor/modernizr-3.5.0.min.js'%}"></script>
+  <!-- Jquery, Popper, Bootstrap -->
+  <script src="{%static 'core/./assets/js/vendor/jquery-1.12.4.min.js'%}"></script>
+  <script src="{%static 'core/./assets/js/popper.min.js'%}"></script>
+  <script src="{%static 'core/./assets/js/bootstrap.min.js'%}"></script>
+  <!-- Jquery Mobile Menu -->
+  <script src="{%static 'core/./assets/js/jquery.slicknav.min.js'%}"></script>
+
+  <!-- Jquery Slick , Owl-Carousel Plugins -->
+  <script src="{%static 'core/./assets/js/owl.carousel.min.js'%}"></script>
+  <script src="{%static 'core/./assets/js/slick.min.js'%}"></script>
+  <!-- Date Picker -->
+  <script src="{%static 'core/./assets/js/gijgo.min.js'%}"></script>
+  <!-- One Page, Animated-HeadLin -->
+  <script src="{%static 'core/./assets/js/wow.min.js'%}"></script>
+  <script src="{%static 'core/./assets/js/animated.headline.js'%}"></script>
+  <script src="{%static 'core/./assets/js/jquery.magnific-popup.js'%}"></script>
+
+  <!-- Scrollup, nice-select, sticky -->
+  <script src="{%static 'core/./assets/js/jquery.scrollUp.min.js'%}"></script>
+  <script src="{%static 'core/./assets/js/jquery.nice-select.min.js'%}"></script>
+  <script src="{%static 'core/./assets/js/jquery.sticky.js'%}"></script>
+
+  <!-- contact js -->
+  <script src="{%static 'core/./assets/js/contact.js'%}"></script>
+  <script src="{%static 'core/./assets/js/jquery.form.js'%}"></script>
+  <script src="{%static 'core/./assets/js/jquery.validate.min.js'%}"></script>
+  <script src="{%static 'core/./assets/js/mail-script.js'%}"></script>
+  <script src="{%static 'core/./assets/js/jquery.ajaxchimp.min.js'%}"></script>
+
+  <!-- Jquery Plugins, main Jquery -->
+  <script src="{%static 'core/./assets/js/plugins.js'%}"></script>
+  <script src="{%static 'core/./assets/js/main.js'%}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  {% if messages %}
+  {% for m in messages %}
+  <script>
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "{{m}}",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  </script>
+  {% endfor %}
+  {% endif %}
+
+  {% if messages %}
+  {% for message in messages %}
+  <script>
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "{{ message }}",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  </script>
+  {% endfor %}
+  {% endif %}
+</body>
+
+</html>

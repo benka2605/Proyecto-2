@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 ">
+            <div class="text-center">
+                {% load crispy_forms_tags %}
+                <h1>Editar Noticia</h1>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form_noticia | crispy }}
+                    {{ form_imagen | crispy }} 
+                    <button type="submit" class="button">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="text-center">{{ msj }}</h4>
+
+
+{% endblock %}

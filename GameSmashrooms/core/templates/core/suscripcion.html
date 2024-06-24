@@ -1,0 +1,190 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+{% load crispy_forms_tags %}
+
+
+<div class="container elpepe">
+
+    <h1>Planes</h1>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="plan">
+                <div class="inner">
+                    <span class="pricing">
+                        <span>
+                            $0 <small>/ m</small>
+                        </span>
+                    </span>
+                    <p class="title">Gratuito</p>
+                    <p class="info">Este es un plan simple.</p>
+                    <ul class="features">
+                        <li>
+                            <span class="icon">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path fill="currentColor"
+                                        d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                                </svg>
+                            </span>
+                            <span>Ver noticias</span>
+                        </li>
+                        <li>
+                            <span class="icon">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path fill="currentColor"
+                                        d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                                </svg>
+                            </span>
+                            <span>Acceder a mi perfil</span>
+                        </li>
+                    </ul>
+                    <div class="action">
+                        <a class="boton-plan" href="#">
+                            Choose plan
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="plan">
+                <div class="inner">
+                    <span class="pricing">
+                        <span>
+                            $20 <small>/ m</small>
+                        </span>
+                    </span>
+                    <p class="title">Professional</p>
+                    <p class="info">Este es un plan god.</p>
+                    <ul class="features">
+                        <li>
+                            <span class="icon">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path fill="currentColor"
+                                        d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                                </svg>
+                            </span>
+                            <span>Ver noticias</span>
+                        </li>
+                        <li>
+                            <span class="icon">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path fill="currentColor"
+                                        d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                                </svg>
+                            </span>
+                            <span>Acceder a mi perfil</span>
+                        </li>
+                        <li>
+                            <span class="icon">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path fill="currentColor"
+                                        d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                                </svg>
+                            </span>
+                            <span>Recibir noticias exlusivas</span>
+                        </li>
+                        <li>
+                            <span class="icon">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path fill="currentColor"
+                                        d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                                </svg>
+                            </span>
+                            <span>Prioridad al momento de revisar la noticia</span>
+                        </li>
+                    </ul>
+                    <div class="action">
+                        <div style="justify-content: center;" class="text-center" id="paypal-button"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script
+    src="https://www.paypal.com/sdk/js?client-id=AWKOqWDKf-YlyxBwIedu2SIbmy9VsFU5oMVM1Gw-q7hBjix-Nt3rO68-8CDfO_repG9bxQZgIBQuBJzn">
+    </script>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+    paypal.Button.render({
+        env: 'sandbox',
+        client: {
+            sandbox: 'AWKOqWDKf-YlyxBwIedu2SIbmy9VsFU5oMVM1Gw-q7hBjix-Nt3rO68-8CDfO_repG9bxQZgIBQuBJzn',
+            production: 'demo_production_client_id'
+        },
+        locale: 'en_US',
+        style: {
+            size: 'medium',
+            color: 'black',
+            shape: 'pill',
+        },
+        commit: true,
+        payment: function (data, actions) {
+            return actions.payment.create({
+                transactions: [{
+                    amount: {
+                        total: '20.00',
+                        currency: 'USD'
+                    }
+                }]
+            });
+        },
+        onAuthorize: function (data, actions) {
+            return actions.payment.execute().then(function (details) {
+                console.log('Pago realizado, enviando solicitud de actualización de plan');
+                
+                // Crear un formulario para enviar los datos
+                const formData = new FormData();
+                formData.append('orderID', data.orderID);
+                formData.append('details', JSON.stringify(details));
+                formData.append('plan_id', '2'); // ID del plan "Professional"
+
+                fetch('/actualizar_plan/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: formData
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            console.log('Plan actualizado exitosamente');
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "Compra realizada con exito, seras redireccionado a la pagina del voucher ",
+                                showConfirmButton: false,
+                                timer: 2500,
+                                didClose: () => {
+                                    window.location.href = data.voucher_url;
+                                }
+                            });
+                        } else {
+                            console.log('Error al actualizar el plan:', data);
+                            window.alert('There was an error updating your plan.');
+                        }
+                    }).catch(error => {
+                        console.error("Error en la solicitud de actualización de plan:", error);
+                    });
+            });
+        }
+    }, '#paypal-button');
+</script>
+
+
+
+
+
+
+
+{% endblock %}

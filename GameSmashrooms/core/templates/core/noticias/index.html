@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+
+
+    <div class="container">
+        <h1 style="text-align: center;" class="mt-5">{{ noticia.titulo }}</h1>
+        {% if noticia.images.all %}
+        <ul>
+            {% for imagen in noticia.images.all %}
+            <div class="elpepe">
+
+                <li><img src="{{ imagen.image.url }}" alt="Imagen asociada a la noticia"></li>
+            </div>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay imágenes asociadas a esta noticia.</p>
+    {% endif %}
+        <p style="text-align: center;">{{ noticia.descripcion }}</p>
+        <p style="text-align: center;">{{ noticia.periodista }}-----{{ noticia.fecha_noticia | date:"Y-m-d" }}</p>
+        <p style="text-align: center;">{{ noticia.categoria }}</p>
+        <p style="text-align: center;">Ubicacion: {{ noticia.ubicacion }}</p>
+    </div>
+
+
+
+{% endblock %}
+
